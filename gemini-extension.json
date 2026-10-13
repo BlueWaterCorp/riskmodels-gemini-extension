@@ -1,0 +1,12 @@
+{
+  "name": "riskmodels",
+  "version": "1.0.0",
+  "description": "US equity and portfolio risk analytics, ETF hedge ratios, and point-in-time fundamentals.",
+  "mcpServers": {
+    "riskmodels": {
+      "httpUrl": "https://riskmodels.app/api/mcp/openai",
+      "timeout": 120000
+    }
+  },
+  "contextFileName": "GEMINI.md"
+}
