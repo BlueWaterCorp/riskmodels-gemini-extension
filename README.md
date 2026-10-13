@@ -30,6 +30,28 @@ Gemini registers itself with RiskModels and opens your browser at riskmodels.app
 
 The browser must run on the same machine as Gemini CLI, because the sign-in returns to a `http://localhost:<port>/oauth/callback` address. Gemini waits only a few minutes for it.
 
+### No browser on this machine (SSH, server, CI): use an API key
+
+The server also accepts a RiskModels API key, so no browser sign-in is needed.
+
+1. Create a key at [riskmodels.app/get-key](https://riskmodels.app/get-key).
+2. Export it in the shell that runs Gemini CLI: `export RISKMODELS_API_KEY=...`. Keep it out of files you commit.
+3. Add this server entry to `~/.gemini/settings.json`. A server in `settings.json` takes precedence over the extension's server of the same name:
+
+```json
+{
+  "mcpServers": {
+    "riskmodels": {
+      "httpUrl": "https://riskmodels.app/api/mcp/openai",
+      "headers": { "Authorization": "Bearer $RISKMODELS_API_KEY" },
+      "timeout": 120000
+    }
+  }
+}
+```
+
+Gemini CLI expands `$RISKMODELS_API_KEY` from the environment. `/mcp` should then show `riskmodels` as connected, with no `/mcp auth` step.
+
 ## Try it
 
 - `Break down NVDA's risk into market, sector, subsector and stock-specific parts. Include the data date.`
@@ -38,7 +60,7 @@ The browser must run on the same machine as Gemini CLI, because the sign-in retu
 - `Retrieve AAPL's quarterly fundamentals available as of June 30, 2025. Include filing dates and exclude later filings.`
 - With a brokerage account linked in [riskmodels.net](https://riskmodels.net) settings: `Show my linked brokerage positions, including longs and shorts.`
 
-Tools return structured data with chart specifications. Gemini CLI shows the results as text and tables; it does not draw charts.
+Tools return structured data, which Gemini CLI shows as text and tables. For a chart, ask for one: `Render NVDA's risk decomposition chart as a PNG.` The `riskmodels_render_artifact` tool returns the image to the model, which can read and describe it. Gemini CLI does not display images in the terminal.
 
 ## What it does not do
 
